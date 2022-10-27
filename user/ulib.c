@@ -95,6 +95,7 @@ stat(const char *n, struct stat *st)
   return r;
 }
 
+//Converts string to integer method
 int
 atoi(const char *s)
 {

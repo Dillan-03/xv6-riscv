@@ -150,7 +150,8 @@ main(void)
 
   // Ensure that three file descriptors are open.
   while((fd = open("console", O_RDWR)) >= 0){
-    if(fd >= 3){
+	//makes sure we always have three file descriptors open  
+   if(fd >= 3){
       close(fd);
       break;
     }
@@ -165,7 +166,13 @@ main(void)
         fprintf(2, "cannot cd %s\n", buf+3);
       continue;
     }
+    //It then call 'fork' which creates a copy of the shell process
+    //The parent then calls 'wait' while the chid runs the command 
     if(fork1() == 0)
+	//User Input
+	//ex. if the user had typed 'echo hello' to the shell, 'runcmd' would have been called with the command as the arguement. For 'echo hello', it would call 'exec'. 
+	//if 'exec' succeeds then the child will execute the instructions from 'echo' instead of 'runcmd' 
+	//at some point, 'echo' will call 'exit', which will cause the parent to return to 'wait' in 'main'
       runcmd(parsecmd(buf));
     wait(0);
   }
