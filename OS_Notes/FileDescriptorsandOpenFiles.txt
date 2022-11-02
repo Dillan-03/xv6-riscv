@@ -1,0 +1,16 @@
+Within the file system, there can be three types of files:
+(1) Directory File
+(2) Regular File
+(3) Device File
+Each of these files has a inode which can be referenced by the pathname
+
+''FILE struct'' have the fopen(),fread(),etc functions.
+These functions use system calls like open(),close() where they communicate with the kernel by using file descriptors which are integers referring to different files. File descriptors can also point to the three types of files(above) and pipes.
+
+
+A file that is open in some process can either be a FD_PIPE,FD_INODE(directory/regular file) or FD_DEVICE.
+Each pipe struct has a read in and write in 
+
+
+With an inode, the ip field will point to the inode and the offset will also go indicating wherein the inode, the next read and write will occur.
+With a fd_device the ip will point to the inode and the major of the inode will be the same as the major in the fd_device. 

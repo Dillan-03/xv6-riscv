@@ -1,0 +1,54 @@
+fork()
+
+with a fork, a child process starting to begin
+
+'int id = fork()' 
+
+from the fork(0 line onwards ,the code will be executed twice
+code will be processed in the memory prcoess and the repeated code will be executed in the child process 
+
+if id = 0 { we're in the child process}
+else {we're in the main process} 
+
+fork() (Drawing)
+
+		#
+		#
+		#
+		# fork()
+	#		#	
+	#		#
+	# child process	# main process
+#     		#  #		# fork()
+#		#  #		#
+#		#  #		# 
+creates 4 executable processes
+
+If we create fork n times, we will get 2**n executables
+
+
+
+pipe() - half-duplex(). uni-directional way
+communication between processes
+
+pipe() is a in-memory file. Which has a buffer that is saved in memory that allows you to read and write to it 
+it takes in two array of integers
+fd[0] is read from
+fd[1] is write to
+
+if pipe(id) == -1 {print error opening pipe)
+
+let's say there's user input in the child process, we want the variable saved of the user input to be sent to the main process. This is what write() is for. 
+write(fd[1], &user_input, sizeof(user_input data type)
+
+we need to close the file so we use close(fd[1])
+close(fd[0]) if we are not reading 
+
+reading:
+close(fd[1])
+read(fd[0], &y, sizeof(int));
+close[fd[0])
+
+
+
+
