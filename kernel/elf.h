@@ -1,5 +1,8 @@
 // Format of an ELF executable file
+// The  header  file  <elf.h>  defines the format of ELF executable binary files.  Amongst these files are normal  executable  files,  relocatable object files, core files and shared libraries.
 
+ //An executable file using the ELF file format consists of an ELF header, followed by a program header table or a section header table, or  both.
+//The  ELF  header  is  always  at  offset zero of the file.  The program header table and the section header table's  offset  in  the  file  are defined  in  the  ELF  header.  The two tables describe the rest of the particularities of the file. 
 #define ELF_MAGIC 0x464C457FU  // "\x7FELF" in little endian
 
 // File header

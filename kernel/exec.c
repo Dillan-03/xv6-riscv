@@ -1,3 +1,4 @@
+//ELF files are used for executable binary files in this case and it holds the file format
 #include "types.h"
 #include "param.h"
 #include "memlayout.h"
@@ -11,6 +12,7 @@ static int loadseg(pde_t *, uint64, struct inode *, uint, uint);
 
 int flags2perm(int flags)
 {
+    //Opens the named binary path with namei (from line 26)
     int perm = 0;
     if(flags & 0x1)
       perm = PTE_X;
@@ -40,6 +42,7 @@ exec(char *path, char **argv)
   ilock(ip);
 
   // Check ELF header
+  // Reads in the ELF header
   if(readi(ip, 0, (uint64)&elf, 0, sizeof(elf)) != sizeof(elf))
     goto bad;
 
