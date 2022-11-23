@@ -1,16 +1,21 @@
-Courswork for Malloc and Free
+Coursework for Malloc and Free
 
 ----Variables/functions----
 
 
 void malloc(size_t size)
 	validation to check size == 0 --> return null
+	
+	if head is null -> request spaace using sbrk. check linked list has enough space to allocate block --> use new space
+
 	pointer variable that is assigned to sbrk(size)
 	check pointer variable can be sbrk passed
 	
 void free(void *pter)
 	
-
+void find_space()
+	find a free block in the linked list that is large enough
+	
 main()
 	allocate memory to numbers 1 to 5
 		(malloc calls sbrk to increase heap space by 5)
@@ -22,5 +27,19 @@ We need:
 	- malloc function which takes in n number of bytes and returns a pointer to a block of memory of that size to which the data can be stored in
 	
 
-	- we have virtual address apce where the heap grows upwards in memory to allow dynamic memoryallocation. Stack grows downwards in memory through recursive function calls
+	- we have virtual address space where the heap grows upwards in memory to allow dynamic memoryallocation. Stack grows downwards in memory through recursive function calls
 		- we use sbrk which returns pointer to the current top of the heap and increments the heap by 'size amount' and updates the pointer to the new top of the heap
+
+	- when we are freein, we need to free contiguous memory, we cant return a block of memory that is in a random location in the OS. To resolve this, we store meta-information about the block in some space just below the pointer. And then when freeing, we mark the block as 'freed' without returning it to the OS, so that future malloc calls can re-use the same block.
+		- To implement this, we need to be able access information about each block. We will use a single linked list to do this
+
+	- if find_space() has failed, we need to then use sbrk to request space for the OS and add the new block space at the end of the linked list
+
+
+
+-------Idea--------
+
+- User requests space
+- Check linked list for re-useable space which is large enough
+- If not then we request space from the OS (sbrk) 
+- append the block to the end of the linked list
