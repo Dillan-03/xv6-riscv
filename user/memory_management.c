@@ -1,6 +1,6 @@
 #include "kernel/types.h"
 #include "user/user.h"
-#include "memory_management.h"
+//include "memory_management.h"
 
 
 int main(){

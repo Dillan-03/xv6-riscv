@@ -1,5 +1,10 @@
+#include <stdio.h>
+
+#include "kernel/types.h"
+#incldue "user/user.h"
+
 //header file to hold the struct
-i
+
 //Meta information about the block
 struct block_data{
 	
