@@ -135,8 +135,8 @@ UPROGS=\
 	$U/_hw\
 	$U/_sleep\
 	$U/_pingpong\
-	$U/_find\
 	$U/_memory_management\
+	
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 
