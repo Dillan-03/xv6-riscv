@@ -7,7 +7,7 @@ struct block_data* linked_head = 0;
 
 
 //malloc function
-void* _malloc(int size){
+void * _malloc(int size){
 
 	// void *space = sbrk(4096);
 
@@ -107,14 +107,17 @@ void* _malloc(int size){
 
 //free function which clears memory and remove the block from the linked list
 //takes in pointer of block that needs to be freed
-void _free(void *ptr){
-	return ;
 
+
+void _free(void *ptr){
+	if (!ptr){
+		return ;
+	}
 	
 }
 
 
-
+/**
 
 int main(){
 	printf("Testing Code: .......");
@@ -141,7 +144,7 @@ int main(){
 
 	return 0;
 
-}
+} **/
 
 
 
