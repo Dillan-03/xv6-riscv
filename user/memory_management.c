@@ -114,7 +114,7 @@ void * _malloc(int size){
 
 
 void _free(void *ptr){
-	printf(" block freed\n");
+	printf("block freed\n");
 	if (!ptr){
 		return ;
 	}
@@ -124,33 +124,33 @@ void _free(void *ptr){
 
 
 
-int main(){
-	// printf("Testing Code: .......");
-	printf("\n");
+// int main(){
+// 	// printf("Testing Code: .......");
+// 	printf("\n");
 
 
-	// char *root = _malloc(5);
-	int *test =_malloc(1);
-	printf("%d \n", test);
-	_free(test);
+// 	// char *root = _malloc(5);
+// 	int *test =_malloc(1);
+// 	printf("%d \n", test);
+// 	_free(test);
 
-	int *testtwo =_malloc(1);
-	printf("%d \n", testtwo);
+// 	int *testtwo =_malloc(1);
+// 	printf("%d \n", testtwo);
 
-	int *testthree =_malloc(1);
-	printf("%d \n", testthree);
+// 	int *testthree =_malloc(1);
+// 	printf("%d \n", testthree);
 
-	// printf("%d, %d\n", test, testtwo);
+// 	// printf("%d, %d\n", test, testtwo);
 
-	// _malloc(2);
-	// // _malloc(3);
-	// for(int i =0; i < 26; i ++){
-	// 	root[i] = i + 'A';
-	// }
+// 	// _malloc(2);
+// 	// // _malloc(3);
+// 	// for(int i =0; i < 26; i ++){
+// 	// 	root[i] = i + 'A';
+// 	// }
 
-	return 0;
+// 	return 0;
 
-} 
+// } 
 
 
 
