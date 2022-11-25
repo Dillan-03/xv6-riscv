@@ -31,7 +31,17 @@ int PAGE_SIZE = 4096;
 
 
 };
+struct block_data *allocate_head(struct block_data* linked, int size){
+	linked = (struct block_data*) sbrk(4096);
 
+	//NULL next block
+	linked->next = 0;
+	linked->free = 1;
+
+	linked->sizeBlock = PAGE_SIZE - sizeof(linked);
+
+	return linked;
+}
 //Parameter are the new created block, and the size of the space that is required to store the block
 struct block_data *request_space(struct block_data* tail, int size){
 
@@ -73,4 +83,9 @@ struct block_data *available_block(struct block_data **data, int size){
 	}
 	return find; //return updated head of linked list 
 
+}
+
+//Function which find the address of the struct in multiple places 
+struct block_data *get_blocks(void* ptr){
+	return (struct block_data*)ptr - 1;
 }
