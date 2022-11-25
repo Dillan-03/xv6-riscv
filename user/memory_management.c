@@ -27,7 +27,7 @@ void* _malloc(int size){
 
 			linked_head->sizeBlock = PAGE_SIZE - sizeof(linked_head);
 			// printf("%d\n",linked_head);
-			printf("created linked_head = ");
+			// printf("created linked_head = ");
 
 		}
 		else{
@@ -43,7 +43,7 @@ void* _malloc(int size){
 			if (!block){
 				block = request_space(block,4096);
 				// linked_head ->next = block;
-				printf("free block available at loc: ");
+				// printf("free block available at loc: ");
 				// return linked_head->next;
 			}else{
 				// linked_head->next = block;
@@ -117,7 +117,7 @@ void _free(void *ptr){
 
 
 int main(){
-	printf("Testing Code: .......");
+	// printf("Testing Code: .......");
 	printf("\n");
 
 
