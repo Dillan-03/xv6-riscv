@@ -6,7 +6,7 @@ Coursework for Malloc and Free
 void malloc(size_t size)
 	validation to check size == 0 --> return null
 	
-	if head is null -> request spaace using sbrk. check linked list has enough space to allocate block --> use new space
+	if head is null(0) -> request spaace using sbrk. check linked list has enough space to allocate block --> use new space
 
 	pointer variable that is assigned to sbrk(size)
 	check pointer variable can be sbrk passed
