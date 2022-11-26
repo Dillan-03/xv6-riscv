@@ -6,7 +6,7 @@
 void * _malloc(int size);
 void _free(void *ptr);
 struct block_data *allocate_head(struct block_data* linked, int size);
-struct block_data *request_space(struct block_data* tail, int size);
+struct block_data *space_OS(struct block_data* tail, int size);
 struct block_data *available_block(struct block_data **data, int size);
 
 // struct block_data* linked_head = 0;

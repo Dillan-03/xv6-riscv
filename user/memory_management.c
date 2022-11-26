@@ -108,7 +108,7 @@ void * _malloc(int size){
 		if (linked_head == 0){ //failed 
 
 			//create new block
-			linked_head = request_space(0,4096);
+			linked_head = space_OS(0,4096);
 
 			//assign created block to private block(line 95)
 			block = linked_head;
@@ -125,7 +125,7 @@ void * _malloc(int size){
 			//available space is not found
 			//request space from OS
 			if (!block){
-				block = request_space(previous,size);
+				block = space_OS(previous,size);
 				// linked_head ->next = block;
 				if (!block){
 					return 0;
@@ -167,33 +167,33 @@ void _free(void *ptr){
 
 
 
-// int main(){
-// 	// printf("Testing Code: .......");
-// 	printf("\n");
+int main(){
+	printf("Testing Code: .......");
+	printf("\n");
 
 
-// 	// char *root = _malloc(5);
-// 	int *test =_malloc(1);
-// 	printf("%d \n", test);
-// 	_free(test);
+	char *root = _malloc(5);
+	//int *test =_malloc(1);
+	printf("%d \n", root);
+	_free(root);
 
-// 	int *testtwo =_malloc(1);
-// 	printf("%d \n", testtwo);
+	int *testtwo =_malloc(1);
+ 	printf("%d \n", testtwo);
 
-// 	int *testthree =_malloc(1);
-// 	printf("%d \n", testthree);
+	int *testthree =_malloc(1);
+	printf("%d \n", testthree);
 
-// 	// printf("%d, %d\n", test, testtwo);
+//printf("%d, %d\n", test, testtwo);
 
 // 	// _malloc(2);
 // 	// // _malloc(3);
 // 	// for(int i =0; i < 26; i ++){
 // 	// 	root[i] = i + 'A';
-// 	// }
 
-// 	return 0;
 
-// } 
+	return 0;
+
+} 
 
 
 
