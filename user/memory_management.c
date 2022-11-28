@@ -40,48 +40,41 @@ struct block_data *allocate_head(struct block_data* linked, int size){
 struct block_data *request_space(struct block_data* tail, int size){
 
         //request space
-		struct block_data *new_block;
+	struct block_data *new_block;
         new_block = (struct block_data*)sbrk(size);
 
         //Check if memory can be allocated
-    
         if ((void*)new_block == sbrk(size + sizeof(struct block_data))){
 			if (sbrk(size + sizeof(struct block_data)) == (void*) - 1){//failed
 
 			//     printf("cannot request space from OS");
-					return 0; //sbrk failed
-			}
+			return 0; //sbrk failed
 		}
-
-		// if (tail == 0){
-			// tail->next = new_block;
-		// }
+	}
         
         //Create block and assign meta data
         new_block->sizeBlock = PAGE_SIZE - sizeof(struct block_data);
         new_block->next = 0;
         new_block->free = 0; //0 to initialise block has not been freed
-		// linked_head-> free = 1;
-		// linked_head -> next = new_block;
 
         return new_block;
 }
 
-// //function which finds available space first through the linked list
+//function which finds available space first through the linked list
 struct block_data *available_block(struct block_data **data, int size){
+
 	//create new temp block that holds the head of the linked list
 	struct block_data *find = *data;
+
+	//loop through heap to find free memory which is large enough to store the block
 	while (find && !(find->free == 0 && find->sizeBlock >= size)){
 
-		block *newBlock = splitBlock(&data, size);
-
 		*data = find;
+		//Update next pointer
 		find = find->next;
 	}
 	return find; //return updated head of linked list 
-
 }
-
 
 //Function which find the address of the struct in multiple places 
 struct block_data *get_blocks(void* ptr){
@@ -98,16 +91,16 @@ void * _malloc(int size){
 	if (size <= 0){
 		return 0;
 	}else{
-
-		if (linked_head == 0){ //failed 
-
+		if (linked_head == 0){ //failed
+ 
 			//create new block
 			linked_head = allocate_head(0,4096);
-
+			
+			//current block points to the head of the linked list
 			block = linked_head;
 
 			// printf("%d\n",linked_head);
-			printf("created linked_head = ");
+			//printf("created linked_head = ");
 
 		}
 		
@@ -123,7 +116,7 @@ void * _malloc(int size){
 			if (!block){
 				block = request_space(previous,size);
 				// linked_head ->next = block;
-				if (!block){
+				if (!block){ //sbrk failed
 					return 0;
 				}
 				// printf("free block available at loc: ");
@@ -132,70 +125,17 @@ void * _malloc(int size){
 				//found free block to be used
 				// linked_head->next = block;
 				block->free = 0 ;
-				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data); 
+				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data); //header size 
 			}
-
-			// return block+1;
-
+		}
 		
-
-			// linked_head->free = 0;
-			
-			// block->next = 0;
-			// block->free = 1;
-			// block->sizeBlock = PAGE_SIZE - sizeof(block);
-			//assign pointer to next blocksize
-	// } else{
-	// 	return value;
-	// }
 	
-// 	//Create struct
-// 	struct block_data* block_meta;
-// 	void *result = sbrk(0);
-// 	if (size<= 0){
-// 	//	printf("Malloc failed: unable to allocate memory");
-// 		return 0;
-// 	}
-
-// 	//No linked list
-// 	if (linked_head == 0){
-// 		block_meta = request_space(0,size); 
-	 
-// 		linked_head = block_meta;//create new linked list 
-// 	}
-// 	else{
-// 	//linked list is already created -> check for free memory
-// 		struct block_data *head = linked_head;
-// 		block_meta = available_block(&head, size);
-
-// 		//unable to find available free blocks in linked list
-// 		if (block_meta == 0){
-// 			//printf("Unable to find available free block");
-// 			//request space -> sbrk 
-// 			block_meta = request_space(head, size);
-// 			if (!block_meta){
-// 				return 0;
-// 			}
-// 		}
-// 		//found free block to store data
-// 		else{
-// 			//initalise free as taken
-// 		
-// 			block_meta->free = 0;
-
-// 		}
-		
-	}
-	return block+1;
-	// printf(space,"/n");
-	// return linked_head;
+	return block+1; //updated address pointer
 }
 
 
 //free function which clears memory and remove the block from the linked list
 //takes in pointer of block that needs to be freed
-
-
 void _free(void *ptr){
 	// printf("block freed\n");
 	if (!ptr){
@@ -245,6 +185,5 @@ int main(){
 	return 0;
 
 } 
-
 
 
