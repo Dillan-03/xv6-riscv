@@ -83,13 +83,6 @@ struct block_data *available_block(struct block_data **data, int size){
 }
 
 
-//Function which implements the splitting method-> implementing memory efficient
-struct block_data *splitBlock(struct block_data **data, int size){
-	struct block_data *s_block = *data;
-	while (s_block->free == 0){
-		
-	}
-}
 //Function which find the address of the struct in multiple places 
 struct block_data *get_blocks(void* ptr){
 	return (struct block_data*)ptr - 1;
