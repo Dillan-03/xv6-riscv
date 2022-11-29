@@ -1,17 +1,16 @@
 
 #include "memory_management.h"
 
-//My header is 25bytes because 
 
 void* linked_head = 0;
 
-//Page Size  
+//Page Size
 int PAGE_SIZE = 4096;
 
 
 //Meta information about the block
 struct block_data{
-	
+
 	//Size of block
 	int sizeBlock;
 
@@ -26,20 +25,20 @@ struct block_data{
 
 };
 
-//Create the head of the linked list since list has not been created 
+//Create the head of the linked list since list has not been created
 struct block_data *allocate_head(struct block_data* linked, int size){
 
 	//Create a page of 4096 bytes (i.e one page)
-	linked = (struct block_data*)sbrk(size);
+	linked = (struct block_data*)sbrk(PAGE_SIZE);
 
 	//NULL next block
 	linked->next = 0;
-	
-	//assign the header to be free 
+
+	//assign the header to be free
 	linked->free = 1;
 
 	//Assign the header size of the block
-	linked->sizeBlock = PAGE_SIZE - size - sizeof(struct block_data);
+	linked->sizeBlock = PAGE_SIZE - sizeof(struct block_data);
 
 
 	// printf("Size of the header block is %d \n", linked->sizeBlock);
@@ -63,9 +62,9 @@ struct block_data *request_space(struct block_data* tail, int size){
 			return 0; //sbrk failed
 	}
 	}
-        
+
 	//Create block and assign meta data
-	new_block->sizeBlock = PAGE_SIZE - size - sizeof(struct block_data) ;
+	new_block->sizeBlock = PAGE_SIZE - sizeof(struct block_data) ;
 
 	// PAGE_SIZE - (size + sizeof(struct block_data));
 	new_block->next = 0;
@@ -75,20 +74,29 @@ struct block_data *request_space(struct block_data* tail, int size){
 }
 
 //function which finds available space first through the linked list
-struct block_data *available_block(struct block_data *data, int size){
+struct block_data *available_block(struct block_data **data, int size){
 
 	//create new temp block that holds the head of the linked list
-	struct block_data *find = data;
+	struct block_data* find = *data;
 
 	//loop through heap to find free memory which is large enough to store the block
-	while (find->free == 1 || find->sizeBlock < size){
+	while (find == 0){
 
-		data = find;
-		//Update next pointer
-		find = find->next;
+		if (find->free == 1 && find->sizeBlock >= size){
+
+			*data = find;
+			//Update next pointer
+			find = find->next;
+
+		}
+		// break;
+		else{
+			continue;
+		}
 		break;
 	}
-	return find; //return updated head of linked list 
+
+	return find; //return updated head of linked list
 }
 
 
@@ -98,26 +106,26 @@ void * _malloc(int size){
 	// void *space = sbrk(4096);
 
 	//check for linked list being created
-	if (size <= 0 || size > 4096){
+	if (size <= 0 ){
 		return 0;
 	}else{
 	// 	//linked list has not been created
 		if (linked_head == 0){ //failed
- 
+
 			//create new block
 			linked_head = allocate_head(0,4096);
 			//current block points to the head of the linked list
-			block = linked_head;	
+			block = linked_head;
 			// return block+1; //updated address pointer
 			// printf("linked head allocat ");
 		}
 
-			//Pool of memory is already created. 
+			//Pool of memory is already created.
 			//We don't know which block is taken or free
 			struct block_data *previous = linked_head;
 
-			//find available blocks in heap 
-			block = available_block(previous, size); 
+			//find available blocks in heap
+			block = available_block(&previous, size);
 
 			// printf("1111\n");
 			//available space is not found
@@ -132,16 +140,16 @@ void * _malloc(int size){
 			}else{
 				//found free block to be used
 				block->free = 0 ;
-				block->sizeBlock = size - sizeof(struct block_data) ;
+				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data) ;
 
-				// PAGE_SIZE - (size + sizeof(struct block_data)); //header size 
+				// PAGE_SIZE - (size + sizeof(struct block_data)); //header size
 			}
 			// printf("Size of the head block is %d \n", block->sizeBlock);
 
 		}
 
 		return block+1 ;
-		
+
 }
 
 
@@ -150,14 +158,14 @@ void * _malloc(int size){
 void _free(void *ptr){
 	// printf("block freed\n");
 	if (ptr == 0){
-		//canot free memory
+		//cannot free memory
 		return ; //failed
 	}
 
 	//Merging block once blocks have been splitted
 	//coalescing
 	struct block_data* pointer = (struct block_data*)ptr - 1;
-	if ((pointer->free) == 1){//block ahs not been freed
+	if ((pointer->free) == 1){//block has not been freed
 		// printf("block has not been freed\n");
 	}else{
 		pointer->free = 1;
@@ -165,33 +173,31 @@ void _free(void *ptr){
 	}
 }
 
-
-int main(){
-	// printf("Testing Code: .......");
-	printf("\n");
-
-
-	// char *root = _malloc(5);
-	int *test =_malloc(100);
-	printf("malloc 100 : %d \n", test);
-	_free(test);
-
-	int *testtwo =_malloc(500);
-	printf("malloc 500 : %d \n", testtwo);
-
-	int *testthree =_malloc(100);
-	printf("malloc 100 : %d \n", testthree);
-
-	// printf("%d, %d\n", test, testtwo);
-
-	// _malloc(2);
-	// // _malloc(3);
-	// for(int i =0; i < 26; i ++){
-	// 	root[i] = i + 'A';
-	// }
-
-	return 0;
-
-} 
-
-
+//
+// int main(){
+// 	// printf("Testing Code: .......");
+// 	printf("\n");
+//
+//
+// 	// char *root = _malloc(5);
+// 	int *test =_malloc(100);
+// 	printf("malloc 100 : %d \n", test);
+// 	_free(test);
+//
+// 	int *testtwo =_malloc(500);
+// 	printf("malloc 500 : %d \n", testtwo);
+//
+// 	int *testthree =_malloc(100);
+// 	printf("malloc 100 : %d \n", testthree);
+//
+// 	// printf("%d, %d\n", test, testtwo);
+//
+// 	// _malloc(2);
+// 	// // _malloc(3);
+// 	// for(int i =0; i < 26; i ++){
+// 	// 	root[i] = i + 'A';
+// 	// }
+//
+// 	return 0;
+//
+// }
