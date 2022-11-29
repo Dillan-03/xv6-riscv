@@ -38,7 +38,7 @@ struct block_data *allocate_head(struct block_data* linked, int size){
 	linked->free = 1;
 
 	//Assign the header size of the block
-	linked->sizeBlock = PAGE_SIZE - sizeof(struct block_data);
+	linked->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data));
 
 
 	// printf("Size of the header block is %d \n", linked->sizeBlock);
@@ -63,7 +63,7 @@ struct block_data *request_space(struct block_data* tail, int size){
 	}
 
 	//Create block and assign meta data
-	new_block->sizeBlock = PAGE_SIZE - sizeof(struct block_data) ;
+	new_block->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data));
 
 	// PAGE_SIZE - (size + sizeof(struct block_data));
 	new_block->next = 0;
@@ -136,7 +136,7 @@ void * _malloc(int size){
 			}else{
 				//found free block to be used
 				block->free = 0;
-				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data); //header size
+				block->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data)); //header size
 			}
 		}
 		//return updated address of the block
