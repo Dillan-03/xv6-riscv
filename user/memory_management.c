@@ -42,7 +42,6 @@ struct block_data *allocate_head(struct block_data* linked, int size){
 
 
 	// printf("Size of the header block is %d \n", linked->sizeBlock);
-
 	return linked;
 }
 
@@ -90,10 +89,10 @@ struct block_data *blocks_availability(struct block_data **data, int size){
 
 		}
 		// break;
-		else{
+		else{ //no block is free
 			continue;
 		}
-		break;
+		break; // break after block is found
 	}
 
 	return find; //return updated head of linked list
@@ -103,7 +102,6 @@ struct block_data *blocks_availability(struct block_data **data, int size){
 //malloc function
 void * _malloc(int size){
 	struct block_data *block = 0;
-	// void *space = sbrk(4096);
 
 	//check for linked list being created
 	if (size <= 0 ){
@@ -116,7 +114,6 @@ void * _malloc(int size){
 			linked_head = allocate_head(0,4096);
 			//current block points to the head of the linked list
 			block = linked_head;
-			// return block+1; //updated address pointer
 			// printf("linked head allocat ");
 		}
 
@@ -127,27 +124,22 @@ void * _malloc(int size){
 			//find available blocks in heap
 			block = blocks_availability(&previous, size);
 
-			// printf("1111\n");
 			//available space is not found
 			//request space from OS
 			if (block == 0){
+
 				block = request_space(previous,size);
-				// linked_head ->next = block;
+
 				if (block == 0){ //sbrk failed
 					return 0;
 				}
-				// printf("free block available at loc: ");
 			}else{
 				//found free block to be used
-				block->free = 0 ;
-				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data) ;
-
-				// PAGE_SIZE - (size + sizeof(struct block_data)); //header size
+				block->free = 0;
+				block->sizeBlock = PAGE_SIZE - sizeof(struct block_data); //header size
 			}
-			// printf("Size of the head block is %d \n", block->sizeBlock);
-
 		}
-
+		//return updated address of the block
 		return block+1 ;
 
 }
@@ -163,13 +155,9 @@ void _free(void *ptr){
 	}
 
 	//Merging block once blocks have been splitted
-	//coalescing
 	struct block_data* pointer = (struct block_data*)ptr - 1;
-	if ((pointer->free) == 1){//block has not been freed
-		// printf("block has not been freed\n");
-	}else{
+	if (pointer->free == 0){//block needs to be freed
 		pointer->free = 1;
-		// printf("\nfreed?\n");
 	}
 }
 
