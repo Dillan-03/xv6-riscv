@@ -4,9 +4,6 @@
 
 void* linked_head = 0;
 
-//Page Size
-int PAGE_SIZE = 4096;
-
 
 //Meta information about the block
 struct block_data{
@@ -29,7 +26,7 @@ struct block_data{
 struct block_data *allocate_head(struct block_data* linked, int size){
 
 	//Create a page of 4096 bytes (i.e one page)
-	linked = (struct block_data*)sbrk(PAGE_SIZE);
+	linked = (struct block_data*)sbrk(4096);
 
 	//NULL next block
 	linked->next = 0;
@@ -38,7 +35,7 @@ struct block_data *allocate_head(struct block_data* linked, int size){
 	linked->free = 1;
 
 	//Assign the header size of the block
-	linked->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data));
+	linked->sizeBlock = 4096 - sizeof(struct block_data);
 
 
 	// printf("Size of the header block is %d \n", linked->sizeBlock);
@@ -52,20 +49,20 @@ struct block_data *request_space(struct block_data* tail, int size){
 	struct block_data *new_block;
 
 	//Call sbrk to request a new memory space from the OS
-    new_block = (struct block_data*)sbrk(size);
+    new_block = (struct block_data*)sbrk(size+sizeof(struct block_data));
 
 	//Check if memory can be allocated
-	if ((void*)new_block == sbrk(size + sizeof(struct block_data))){
-		if (sbrk(size + sizeof(struct block_data)) == (void*) - 1){//failed
+	if ((void*)new_block == sbrk(size)){
+		if (sbrk(size) == (void*) - 1){//failed
 		//printf("cannot request space from OS");
 			return 0; //sbrk failed
-	}
+		}
 	}
 
 	//Create block and assign meta data
-	new_block->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data));
+	new_block->sizeBlock = 4096 - sizeof(struct block_data);
 
-	// PAGE_SIZE - (size + sizeof(struct block_data));
+	// 4096 - (size + sizeof(struct block_data));
 	new_block->next = 0;
 	new_block->free = 0; //0 to initialise block has not been freed
 
@@ -136,7 +133,7 @@ void * _malloc(int size){
 			}else{
 				//found free block to be used
 				block->free = 0;
-				block->sizeBlock = PAGE_SIZE - (size + sizeof(struct block_data)); //header size
+				block->sizeBlock = 4096 - sizeof(struct block_data);//header size
 			}
 		}
 		//return updated address of the block
@@ -149,7 +146,7 @@ void * _malloc(int size){
 //takes in pointer of block that needs to be freed
 void _free(void *ptr){
 	// printf("block freed\n");
-	if (ptr == 0){
+	if (ptr == 0 || (void*)sbrk(0)){
 		//cannot free memory
 		return ; //failed
 	}
@@ -161,31 +158,31 @@ void _free(void *ptr){
 	}
 }
 
-//
-// int main(){
-// 	// printf("Testing Code: .......");
-// 	printf("\n");
-//
-//
-// 	// char *root = _malloc(5);
-// 	int *test =_malloc(100);
-// 	printf("malloc 100 : %d \n", test);
-// 	_free(test);
-//
-// 	int *testtwo =_malloc(500);
-// 	printf("malloc 500 : %d \n", testtwo);
-//
-// 	int *testthree =_malloc(100);
-// 	printf("malloc 100 : %d \n", testthree);
-//
-// 	// printf("%d, %d\n", test, testtwo);
-//
-// 	// _malloc(2);
-// 	// // _malloc(3);
-// 	// for(int i =0; i < 26; i ++){
-// 	// 	root[i] = i + 'A';
-// 	// }
-//
-// 	return 0;
-//
-// }
+
+int main(){
+	// printf("Testing Code: .......");
+	printf("\n");
+
+
+	// char *root = _malloc(5);
+	int *test =(int*)_malloc(100);
+	printf("malloc 100 : %p \n", test);
+	// _free(test);
+
+	int *testtwo =(int*)_malloc(100);
+	printf("malloc 500 : %p \n", testtwo);
+
+	// int *testthree =_malloc(100);
+	// printf("malloc 100 : %d \n", testthree);
+
+	// printf("%d, %d\n", test, testtwo);
+
+	// _malloc(2);
+	// // _malloc(3);
+	// for(int i =0; i < 26; i ++){
+	// 	root[i] = i + 'A';
+	// }
+
+	return 0;
+
+}
