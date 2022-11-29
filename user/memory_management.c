@@ -80,7 +80,7 @@ struct block_data *available_block(struct block_data **data, int size){
 	struct block_data* find = *data;
 
 	//loop through heap to find free memory which is large enough to store the block
-	while (find == 0){
+	while (find){
 
 		if (find->free == 1 && find->sizeBlock >= size){
 
@@ -173,31 +173,31 @@ void _free(void *ptr){
 	}
 }
 
-//
-// int main(){
-// 	// printf("Testing Code: .......");
-// 	printf("\n");
-//
-//
-// 	// char *root = _malloc(5);
-// 	int *test =_malloc(100);
-// 	printf("malloc 100 : %d \n", test);
-// 	_free(test);
-//
-// 	int *testtwo =_malloc(500);
-// 	printf("malloc 500 : %d \n", testtwo);
-//
-// 	int *testthree =_malloc(100);
-// 	printf("malloc 100 : %d \n", testthree);
-//
-// 	// printf("%d, %d\n", test, testtwo);
-//
-// 	// _malloc(2);
-// 	// // _malloc(3);
-// 	// for(int i =0; i < 26; i ++){
-// 	// 	root[i] = i + 'A';
-// 	// }
-//
-// 	return 0;
-//
-// }
+
+int main(){
+	// printf("Testing Code: .......");
+	printf("\n");
+
+
+	// char *root = _malloc(5);
+	int *test =_malloc(100);
+	printf("malloc 100 : %d \n", test);
+	_free(test);
+
+	int *testtwo =_malloc(500);
+	printf("malloc 500 : %d \n", testtwo);
+
+	int *testthree =_malloc(100);
+	printf("malloc 100 : %d \n", testthree);
+
+	// printf("%d, %d\n", test, testtwo);
+
+	// _malloc(2);
+	// // _malloc(3);
+	// for(int i =0; i < 26; i ++){
+	// 	root[i] = i + 'A';
+	// }
+
+	return 0;
+
+}
